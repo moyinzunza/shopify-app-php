@@ -13,6 +13,7 @@ use Shopify\Context;
 use Shopify\Utils;
 use Shopify\Webhooks\Registry;
 use Shopify\Webhooks\Topics;
+use App\Http\Controllers\homeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,14 +28,9 @@ use Shopify\Webhooks\Topics;
 
 Route::fallback(function (Request $request) {
     $shop = Utils::sanitizeShopDomain($request->query('shop'));
-    $host = $request->query('host');
     $appInstalled = Session::where('shop', $shop)->exists();
     if ($appInstalled) {
-        return view('react', [
-            'shop' => $shop,
-            'host' => $host,
-            'apiKey' => Context::$API_KEY
-        ]);
+        return homeController::index();
     }
     return redirect("/login?shop=$shop");
 });
